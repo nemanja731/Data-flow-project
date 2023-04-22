@@ -4,12 +4,15 @@
 #include "AbstractConcepts.h"
 #include "Visitor.h"
 
-// Class Visitor methods definitions
-void Visitor::visitModel (Model* e){
-	if (e==0) return;
-	CollectionME* c = e->getElements();
-	if (c==0) return;
-	CollectionMEIt* it=c->getIterator();
+// Class Visitor methods defreadions
+void Visitor::visitModel(Model *e)
+{
+	if (e == 0)
+		return;
+	CollectionME *c = e->getElements();
+	if (c == 0)
+		return;
+	CollectionMEIt *it = c->getIterator();
 	for (it->reset(); !it->isDone(); it->next())
 		(*it->currentItem())->accept(this);
 }

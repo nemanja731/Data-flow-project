@@ -1,49 +1,33 @@
 #pragma once
 
-#include <exception>
-#include <vector>
 #include <string>
-#include "Config.h"
+#include <vector>
+#include "Configuration.h"
+#include "Exceptions.h"
 
 using namespace std;
 
-// Singleton class for handling memory alocation
-class Memory {
- public:
+class Memory
+{
+public:
+    Memory(const Memory &user) = delete;
+    Memory &operator=(const Memory &) = delete;
+    static Memory &getInstance()
+    {
+        static Memory instance;
+        return instance;
+    }
 
-    // Return instance of Memory
-    static Memory& getInstance();
-    Memory(const Memory& user) = delete;
-    Memory& operator=(const Memory&) = delete;
-
-    // Write variable-value pair to memory
+    bool isReady() const;
+    void reserve();
+    void save(string fileName);
     void set(string varName, string val);
-    // Return value of variable
     string get(string varName);
 
-    // Check if writing to memory is avalible
-    inline bool ready() const { return (in_process_ < nw_); };
-    // Increment number of writings in process
-    inline void reserve() { if (ready()) ++in_process_; };
+private:
+    Memory();
 
-    // Save Memory state to file
-    void save(string filename);
-
- private:
-    Memory() { nw_ = Config::getInstance().getValue("Nw"); };
-
-    int nw_, in_process_ = 0;
-    vector<string> variables_;
-    vector<string> values_;
-
-};
-
-class VarNotAvalibleException : public exception {
-    public:
-    VarNotAvalibleException(const char* msg) : exception(), msg_(msg) {};
-    const char * what () const throw () {
-        return msg_;
-    }
-    private:
-        const char* msg_;
+    int nw, inProcess = 0;
+    vector<string> variables;
+    vector<string> values;
 };

@@ -1,46 +1,52 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 #include "Memory.h"
 
 using namespace std;
 
-Memory& Memory::getInstance() {
-    static Memory instance;
-    return instance;
+Memory::Memory() { nw = Configuration::getInstance().getValue("Nw"); }
+
+bool Memory::isReady() const
+{
+    return (inProcess < nw);
 }
 
-// Write variable-value pair to memory
-// Decrement number of writings in process
-void Memory::set(string varName, string val) {
-    --in_process_;
-    for (int i = 0; i < variables_.size(); ++i)
-        if (variables_[i] == varName) {
-            values_[i] = val;
+void Memory::reserve()
+{
+    if (isReady())
+        ++inProcess;
+}
+
+void Memory::save(string fileName)
+{
+    string outpath;
+    outpath = fileName.substr(0, fileName.length() - 4) + ".mem";
+    ofstream outputFile(outpath);
+
+    for (int i = 0; i < variables.size(); ++i)
+        outputFile << variables[i] << " = " << atof(values[i].c_str()) << endl;
+}
+
+void Memory::set(string varName, string val)
+{
+    inProcess = inProcess - 1;
+    for (int i = 0; i < variables.size(); ++i)
+        if (variables[i] == varName)
+        {
+            values[i] = val;
             return;
         }
 
-    variables_.push_back(varName);
-    values_.push_back(val);
+    variables.push_back(varName);
+    values.push_back(val);
 }
 
-// Return value of variable
-// If variable doesn't exist throw exception
-string Memory::get(string varName) {
-    for (int i = 0; i < variables_.size(); ++i)
-        if ( variables_[i] == varName)
-            return values_[i];
-    throw VarNotAvalibleException("Variable not in memory");
-}
-
-// Save Memory state to file
-void Memory::save(string filename) {
-    string outpath;
-    outpath = filename.substr(0, filename.length()-4) + ".mem";
-    ofstream outFile(outpath);
-
-    for (int i = 0; i < variables_.size(); ++i)
-        outFile << variables_[i] << " = " 
-                << atof(values_[i].c_str()) << endl;
+string Memory::get(string varName)
+{
+    for (int i = 0; i < variables.size(); ++i)
+        if (variables[i] == varName)
+            return values[i];
+    throw VariableNotExist("There is not variable in memory.");
 }

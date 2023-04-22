@@ -7,30 +7,21 @@
 
 using namespace std;
 
-// Singleton class for simulation of 
-// .imf file execution
-class Machine{
- public:  
+// execute imf file
+class Machine
+{
+public:
+  static Machine &getInstance();
+  Machine(const Machine &machine) = delete;
+  Machine &operator=(const Machine &) = delete;
 
-  // Returns instance of Machine
-  static Machine& getInstance();
+  void readImf(string fileName);
+  void schedule();
+  void execute(string fileName);
+  void updateAllOperations(string name, string value);
 
-  Machine(const Machine& user) = delete;
-  Machine& operator=(const Machine&) = delete;
-
-  // Initialize machine with .imf file
-  void init(string file);
-  
-  // Put operations ready for execution on scheduler
-  void scheduale();
-
-  // Execute initialized program
-  void exec(string file);
-
-  // Update all operations with given name-value pair
-  void upadeState(string name, string value);
-
- private:
+private:
   Machine() = default;
-  vector<Operation*> waiting_, executing_;
+
+  vector<Operation *> waitingOperations, executingOperations;
 };

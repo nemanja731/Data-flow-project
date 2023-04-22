@@ -5,28 +5,26 @@
 
 using namespace std;
 
-// Singleton class for compiler configuration management
-class Config {
- public:
-    static Config& getInstance() {
-        static Config instance;
+class Configuration
+{
+public:
+    static Configuration &getInstance()
+    {
+        static Configuration instance;
         return instance;
     }
-    Config(const Config& user) = delete;
-    Config& operator=(const Config&) = delete;
 
-    // Initializes Config with configuration file
-    void init(string filename);
+    Configuration(const Configuration &user) = delete;
+    Configuration &operator=(const Configuration &) = delete;
 
-    // Returns value of desired variable
+    void readConfiguration(string fileName);
     double getValue(string name);
+    string getCompilation();
 
-    // Returns compilation strategy from configuration file
-    string getCompilation() { return compilation_; };
+private:
+    Configuration() = default;
 
- private:
-    Config() = default;
-    vector<string> names_;
-    vector<double> values_;
-    string compilation_;
+    string compilation;
+    vector<string> variableNames;
+    vector<double> variableValues;
 };

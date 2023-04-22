@@ -1,100 +1,133 @@
 #include <cmath>
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
 #include <vector>
+#include "Exceptions.h"
 #include "Interfaces.h"
-#include "Types.h"
-#include "Operation.h"
-#include "Memory.h"
 #include "Machine.h"
-#include "Logger.h"
+#include "Memory.h"
+#include "Operation.h"
 #include "Sched.h"
+#include "Types.h"
+#include "Writer.h"
 
 using namespace std;
 
-// Check if string is real number
-bool digitString(const string s){
-    return s.find_first_not_of( ".-0123456789" ) == string::npos;
+void Operation::setStartTime(double time)
+{
+    startTime = to_string((int)time);
 }
 
-// Set value of port
-void Operation::setPort(int portNumber, string variable) {
-    in_ports_.at(portNumber) = variable;
+double Operation::getTime() const
+{
+    return time;
 }
 
-// Update value of token
-void Operation::updatePort(string varName, string newValue) {
-    for (int i = 0; i < in_ports_.size(); ++i)
-        if (in_ports_[i] == varName) in_ports_[i] = newValue;
+// set value of input
+void Operation::setInput(int inputNumber, string variable)
+{
+    inputs.at(inputNumber) = variable;
 }
 
-// Check if all ports have numbers in them
-bool Operation::check() {
-    try {
-        for (string val : in_ports_)
-            if (!digitString(val))
+// update value of token
+void Operation::updateInput(string varName, string newValue)
+{
+    for (int i = 0; i < inputs.size(); ++i)
+        if (inputs[i] == varName)
+            inputs[i] = newValue;
+}
+
+// check if all inputs have values
+bool Operation::check()
+{
+    try
+    {
+        for (string val : inputs)
+            if (!checkNumber(val))
                 return false;
     }
-    catch(VarNotAvalibleException& e) {
+    catch (VariableNotExist &e)
+    {
         return false;
     }
     return true;
 }
 
-// Check if all ports have numbers in them
-// Check if memory is ready for writing
-bool Equal::check() {
-    try {
-        if (digitString(in_ports_[0]) && Memory::getInstance().ready()) {
+bool Operation::done() const
+{
+    return done;
+}
+
+// check if string is real number
+bool checkNumber(const string s)
+{
+    return s.find_first_not_of(".-0123456789") == string::npos;
+}
+
+// check if all inputs have values and if memory is ready for writing
+bool Equal::check()
+{
+    try
+    {
+        if (checkNumber(inputs[0]) && Memory::getInstance().ready())
+        {
             Memory::getInstance().reserve();
             return true;
         }
         return false;
     }
-    catch(VarNotAvalibleException& e) {
+    catch (VariableNotExist &e)
+    {
         return false;
     }
 }
 
-// Interface with Scheduler class
-void Operation::notify(ID id) {
-    done_ = true;
-    end_time_ = to_string((int) Scheduler::Instance()->getCurTime());
+// interface with Scheduler class
+void Operation::notify(ID id)
+{
+    done = true;
+    endTime = to_string((int)Scheduler::Instance()->getCurTime());
     string result = evaluate();
 
-    string logData = "";
-    logData = token_ + " (" + start_time_ + "-" + end_time_ + ")ns";
-    Logger::getInstance().log(logData.c_str());
+    string data = "";
+    data = token + " (" + startTime + "-" + endTime + ")ns";
+    Writer::getInstance().write(data.c_str());
 
-    Machine::getInstance().upadeState(output_name_, result);
+    Machine::getInstance().updateAllOperations(outputName, result);
 }
 
-string Equal::evaluate() {
-    Memory::getInstance().set(output_name_, in_ports_[0]);
-    return in_ports_[0];
+string Equal::evaluate()
+{
+    Memory::getInstance().set(outputName, inputs[0]);
+    return inputs[0];
 }
 
-string Add::evaluate() {
-    double val1, val2, solution;
-    val1 = atof(in_ports_[0].c_str());
-    val2 = atof(in_ports_[1].c_str());
-    solution = val1 + val2;
-    return to_string(solution);
+double[] Operation::eval()
+{
+    double values[3];
+    value[0] = atof(inputs[0].c_str());
+    value[1] = atof(inputs[1].c_str());
+    return values;
 }
 
-string Mul::evaluate() {
-    double val1, val2, solution;
-    val1 = atof(in_ports_[0].c_str());
-    val2 = atof(in_ports_[1].c_str());
-    solution = val1 * val2;
-    return to_string(solution);
+string Add::evaluate()
+{
+    double values[3] = eval();
+    values[2] = values[0] + values[1];
+    return to_string(values[2]);
 }
 
-string Pow::evaluate() {
-    double val1, val2, solution;
-    val1 = atof(in_ports_[0].c_str());
-    val2 = atof(in_ports_[1].c_str());
-    solution = std::pow(val1, val2);
-    return to_string(solution);
+string Mul::evaluate()
+{
+    double values[3] = eval();
+    values[2] = values[0] * values[1];
+    return to_string(values[2]);
+}
+
+string Pow::evaluate()
+{
+    double values[3] = eval();
+    values[2] = std::pow(values[0], values[1]);
+    return to_string(values[2]);
 }

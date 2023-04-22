@@ -2,104 +2,117 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "Event.h"
 #include "Machine.h"
 #include "Memory.h"
-#include "Event.h"
 #include "Sched.h"
 
 using namespace std;
 
-// Returns instance of Machine
-Machine& Machine::getInstance() {
+Machine &Machine::getInstance()
+{
     static Machine instance;
     return instance;
 }
 
-// Initialize machine with .imf file
-void Machine::init(string file) {
-    ifstream inFile(file);
+void Machine::readImf(string file)
+{
+    ifstream inputFile(file);
     string line, token;
     string op, dest, var1, var2;
-    Operation* tmp;
+    Operation *temporary;
 
-    // Create operation object for each line of .imf file
-    // Put all operations in waiting_ vecotor
-    while (getline(inFile, line)) {
+    // for each line of .imf file creates operation object
+    while (getline(inputFile, line))
+    {
         stringstream ss(line);
-        
+
         ss >> token >> op >> dest >> var1;
 
-        if (op == "=") {
-            tmp = new Equal(token, dest);
-            tmp->setPort(0, var1);
+        if (op == "=")
+        {
+            temporary = new Equal(token, dest);
+            temporary->setInput(0, var1);
         }
-        else {
+        else
+        {
             ss >> var2;
-            switch (op[0]) {
+            switch (op[0])
+            {
             case '+':
-                tmp = new Add(token, dest);
+                temporary = new Add(token, dest);
                 break;
             case '*':
-                tmp = new Mul(token, dest);
+                temporary = new Mul(token, dest);
                 break;
             case '^':
-                tmp = new Pow(token, dest);
+                temporary = new Pow(token, dest);
                 break;
             default:
                 break;
             }
-            tmp->setPort(0, var1);
-            tmp->setPort(1, var2);
+            temporary->setInput(0, var1);
+            temporary->setInput(1, var2);
         }
-        waiting_.push_back(tmp);
+        // push all operations in waitingOperations
+        waitingOperations.push_back(temporary);
     }
 }
 
-// Put all ready files on scheduler
-// Move all ready files from waiting to executing 
-void Machine::scheduale() {
+// push all ready files on scheduler and move all ready files from waiting to executing
+void Machine::schedule()
+{
     int i = 0;
-    while (i < waiting_.size()) {
-        if (waiting_[i]->check()) {
-            Event::create(waiting_[i], waiting_[i]->execTime());
-            waiting_[i]->setStart(Scheduler::Instance()->getCurTime());
-            executing_.push_back(waiting_[i]);
-            waiting_.erase(waiting_.begin() + i);
-        } else ++i;
+    while (i < waitingOperations.size())
+    {
+        if (waitingOperations[i]->check())
+        {
+            Event::create(waitingOperations[i], waitingOperations[i]->getTime());
+            waitingOperations[i]->setStartTime(Scheduler::Instance()->getCurTime());
+            executingOperations.push_back(waitingOperations[i]);
+            waitingOperations.erase(waitingOperations.begin() + i);
+        }
+        else
+            ++i;
     }
 }
 
-// Execute initialized program
-void Machine::exec(string file) {
+// put operations ready for execution on scheduler
+void Machine::execute(string file)
+{
 
-    // Init machine
-    init(file);
+    // read machine
+    read(file);
 
-    // Process all ready operations until they are all done
-    while ((!waiting_.empty()) || (!executing_.empty())) {
-        scheduale();
-        Scheduler::Instance()->processNow();    
+    // process all ready operations until they are all done
+    while ((!waitingOperations.empty()) || (!executingOperations.empty()))
+    {
+        schedule();
+        Scheduler::Instance()->processNow();
     }
 
-    // Save Memory state
+    // save Memory state
     Memory::getInstance().save(file);
 }
 
-// Update all operations with given name-value pair
-void Machine::upadeState(string name, string value) {
+// update all operations
+void Machine::updateAllOperations(string name, string value)
+{
 
-    // Update all ports
-    for (int i = 0; i < waiting_.size(); ++i)
-        waiting_[i]->updatePort(name, value);
-    
-    // Remove all done operations
+    for (int i = 0; i < waitingOperations.size(); ++i)
+        waitingOperations[i]->updateInput(name, value);
+
+    // all completed operations should be removed
     int i = 0;
-    while (i < executing_.size())
-        if (executing_[i]->done()) {
-            delete executing_[i];
-            executing_.erase(executing_.begin() + i);
-        } else ++i;
+    while (i < executingOperations.size())
+        if (executingOperations[i]->done())
+        {
+            delete executingOperations[i];
+            executingOperations.erase(executingOperations.begin() + i);
+        }
+        else
+            ++i;
 
-    // Schedual all now ready operations 
-    scheduale();
+    // schedule ready operations
+    schedule();
 }
