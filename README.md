@@ -4,8 +4,22 @@
 
 ## How it works
 
+### Read configuration
+
 ### Infix to Postfix
 
-<p float="left">
-  <img src="images/testTxt.png" width="100" />
+<p align="left">
+  <img src="images/infixToPostfix.png" width="30%">
 </p>
+
+### Creation of imf file
+
+<p float="left">
+  <img src="images/testTxt.png" width="30%" />
+  <img src="images/testImf.png" width="30%" />
+</p>
+
+### Start Scheduler
+
+### Make mem file
+---
