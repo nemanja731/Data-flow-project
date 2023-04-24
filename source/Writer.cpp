@@ -4,7 +4,7 @@
 using namespace std;
 
 // open file
-void Writer::read(string file)
+void Writer::open(string file)
 {
     fileName.open(file);
 }

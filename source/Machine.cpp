@@ -80,9 +80,8 @@ void Machine::schedule()
 // put operations ready for execution on scheduler
 void Machine::execute(string file)
 {
-
     // read machine
-    read(file);
+    readImf(file);
 
     // process all ready operations until they are all done
     while ((!waitingOperations.empty()) || (!executingOperations.empty()))

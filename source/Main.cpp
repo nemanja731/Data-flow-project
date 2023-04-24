@@ -10,12 +10,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    string ConfigurationfileName = argv[1], fileName = argv[2];
+    string configurationFileName = argv[1], fileName = argv[2];
     string logFileName = fileName.substr(0, fileName.length() - 4) + ".log";
 
-    // read log file and configuration file
-    Writer::getInstance().read(logFileName);
-    Configuration::getInstance().read(ConfigurationfileName);
+    // open log file and configuration file
+    Writer::getInstance().open(logFileName);
+    Configuration::getInstance().readConfiguration(configurationFileName);
 
     // creates compiler
     Compiler *compiler = new Compiler;

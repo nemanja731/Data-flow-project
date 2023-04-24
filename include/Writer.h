@@ -15,7 +15,7 @@ public:
         return instance;
     }
 
-    void read(string file);
+    void open(string file);
     void write(string logText);
     void close();
 
