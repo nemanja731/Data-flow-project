@@ -6,11 +6,11 @@
 
 using namespace std;
 
-Memory::Memory() { nw = Configuration::getInstance().getValue("Nw"); }
+Memory::Memory() { maxNumberOfProcess = Configuration::getInstance().getValue("Nw"); }
 
 bool Memory::isReady() const
 {
-    return (inProcess < nw);
+    return (inProcess < maxNumberOfProcess);
 }
 
 void Memory::reserve()

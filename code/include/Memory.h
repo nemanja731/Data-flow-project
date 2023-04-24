@@ -27,7 +27,7 @@ public:
 private:
     Memory();
 
-    int nw, inProcess = 0;
+    int maxNumberOfProcess, inProcess = 0;
     vector<string> variables;
     vector<string> values;
 };
