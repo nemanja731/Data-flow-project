@@ -89,11 +89,9 @@ void Operation::notify(ID id)
     done = true;
     endTime = to_string((int)Scheduler::Instance()->getCurTime());
     string result = evaluate();
-
     string data = "";
     data = token + " (" + startTime + "-" + endTime + ")ns";
     Writer::getInstance().write(data.c_str());
-
     Machine::getInstance().updateAllOperations(outputName, result);
 }
 
