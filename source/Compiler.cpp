@@ -9,6 +9,11 @@
 
 using namespace std;
 
+Compiler::Compiler()
+{
+    compiler->setStrategy(Configuration::getInstance().getCompilation());
+}
+
 void Compiler::setStrategy(string name)
 {
     delete strategy;

@@ -14,7 +14,7 @@ using namespace std;
 class Compiler
 {
 public:
-    Compiler() = default;
+    Compiler();
 
     string compile(string filepath) const;
     void setStrategy(string name);
