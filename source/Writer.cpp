@@ -4,19 +4,19 @@
 using namespace std;
 
 // open file
-void Writer::open(string file)
+void Writer::open(string fileName)
 {
-    fileName.open(file);
+    file.open(fileName);
 }
 
 // close file
 void Writer::close()
 {
-    fileName.close();
+    file.close();
 }
 
 // write to file
 void Writer::write(string text)
 {
-    fileName << text << endl;
+    file << text << endl;
 }

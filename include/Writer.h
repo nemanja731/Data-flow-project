@@ -15,11 +15,11 @@ public:
         return instance;
     }
 
-    void open(string file);
-    void write(string logText);
+    void open(string fileName);
+    void write(string text);
     void close();
 
 private:
     Writer() = default;
-    ofstream fileName;
+    ofstream file;
 };
