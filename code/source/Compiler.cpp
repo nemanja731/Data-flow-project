@@ -11,7 +11,7 @@ using namespace std;
 
 Compiler::Compiler()
 {
-    compiler->setStrategy(Configuration::getInstance().getCompilation());
+    compiler->setStrategy(Configuration::getInstance().getStrategy());
 }
 
 void Compiler::setStrategy(string name)
@@ -23,8 +23,8 @@ void Compiler::setStrategy(string name)
         strategy = new AdvancedStrategy;
 }
 
-string Compiler::compile(string filepath) const
+string Compiler::compile(string fileName) const
 {
-    strategy->compile(filepath);
-    return filepath.substr(0, filepath.length() - 4) + ".imf";
+    strategy->compile(fileName);
+    return fileName.substr(0, fileName.length() - 4) + ".imf";
 }

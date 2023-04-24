@@ -13,7 +13,7 @@ using namespace std;
 class Strategy
 {
 public:
-    virtual void compile(string filepath) = 0;
+    virtual void compile(string fileName) = 0;
 
 protected:
     string infixToPostfix(string infix);
@@ -28,13 +28,13 @@ protected:
 class SimpleStrategy : public Strategy
 {
 public:
-    virtual void compile(string filepath) override;
+    virtual void compile(string fileName) override;
 };
 
 class AdvancedStrategy : public Strategy
 {
 public:
-    virtual void compile(string filepath) override;
+    virtual void compile(string fileName) override;
 
 private:
     set<string> included;

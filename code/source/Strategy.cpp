@@ -11,18 +11,18 @@
 
 // reads each line of given file, infix -> postfix
 // segments postfix notation to one operation in each line
-void SimpleStrategy::compile(string filepath)
+void SimpleStrategy::compile(string fileName)
 {
-    string line, outpath;
+    string line, outFileName;
     stringstream ss;
     int temporaryCounter = 1, operation = 1;
 
     // txt -> imf
-    outpath = filepath.substr(0, filepath.length() - 4) + ".imf";
-    ifstream inputFile(filepath);
-    ofstream outputFile(outpath);
-    while (getline(line, outputFile, operation, temporaryCounter))
-        readLine(line);
+    outFileName = fileName.substr(0, fileName.length() - 4) + ".imf";
+    ifstream inputFile(fileName);
+    ofstream outputFile(outFileName);
+    while (getline(inputFile, line))
+        readLine(line, outputFile, operation, temporaryCounter);
     inputFile.close();
     outputFile.close();
 }
@@ -61,26 +61,51 @@ void SimpleStrategy::readLine(string line, ofstream outputFile, int operation, i
     }
 }
 
-// Advanced compilation strategy
-void AdvancedStrategy::compile(string filepath)
+// returns next variable, value or operation in a given string
+string Strategy::readNext(string input, int *it)
 {
-    string line, outpath;
+    string el = "";
+    while ((*it < input.length()) && input[*it] == ' ')
+        (*it)++;
+
+    if (*it > input.length())
+        return el;
+
+    if ((input[*it] == '-') && (isdigit(input[(*it) + 1])))
+    {
+        el += "-";
+        ++(*it);
+    }
+
+    if (checkOperation(input[*it]))
+        el = input[(*it)++];
+    else
+        while ((*it < input.size()) && !checkOperation(input[*it]) && input[*it] != ' ')
+            el += input[(*it)++];
+
+    return el;
+}
+
+// Advanced strategy
+void AdvancedStrategy::compile(string fileName)
+{
+    string line, outFileName;
     stringstream ss;
 
     // txt -> imf
-    outpath = filepath.substr(0, filepath.length() - 4) + ".imf";
-    ifstream inputFile(filepath);
+    outFileName = fileName.substr(0, fileName.length() - 4) + ".imf";
+    ifstream inputFile(fileName);
     vector<string> commands;
     // read each line
     while (inputFile.peek() != EOF)
-        readLine();
+        readLine(inputFile);
     inputFile.close();
 
     // sort by importance which is calculated as sum of time needed for all
     sortCommands(commands);
 
     // write sorted commands to output location
-    ofstream outputFile(outpath);
+    ofstream outputFile(outFileName);
     for (string com : commands)
         outputFile << com << endl;
 }
@@ -148,8 +173,7 @@ void AdvancedStrategy::sortCommands(vector<string> &commands)
 
     for (int i = 0; i < commands.size(); ++i)
         for (int j = i; j < commands.size(); ++j)
-            if (scores.at(getN(commands[i], 3)) <
-                scores.at(getN(commands[j], 3)))
+            if (scores.at(getN(commands[i], 3)) < scores.at(getN(commands[j], 3)))
                 swap(commands[i], commands[j]);
 }
 
@@ -322,31 +346,6 @@ int Strategy::outputPriority(char c)
         return 1;
         break;
     }
-}
-
-// returns next variable, value or operation in a given string
-string Strategy::readNext(string input, int *it)
-{
-    string el = "";
-    while ((*it < input.length()) && input[*it] == ' ')
-        (*it)++;
-
-    if (*it > input.length())
-        return el;
-
-    if ((input[*it] == '-') && (isdigit(input[(*it) + 1])))
-    {
-        el += "-";
-        ++(*it);
-    }
-
-    if (checkOperation(input[*it]))
-        el = input[(*it)++];
-    else
-        while ((*it < input.size()) && !checkOperation(input[*it]) && input[*it] != ' ')
-            el += input[(*it)++];
-
-    return el;
 }
 
 bool Strategy::checkOperation(string c)

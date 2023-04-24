@@ -16,7 +16,7 @@ class Compiler
 public:
     Compiler();
 
-    string compile(string filepath) const;
+    string compile(string fileName) const;
     void setStrategy(string name);
 
 private:

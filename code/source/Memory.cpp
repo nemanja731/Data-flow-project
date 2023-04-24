@@ -21,9 +21,9 @@ void Memory::reserve()
 
 void Memory::save(string fileName)
 {
-    string outpath;
-    outpath = fileName.substr(0, fileName.length() - 4) + ".mem";
-    ofstream outputFile(outpath);
+    string outFileName;
+    outFileName = fileName.substr(0, fileName.length() - 4) + ".mem";
+    ofstream outputFile(outFileName);
 
     for (int i = 0; i < variables.size(); ++i)
         outputFile << variables[i] << " = " << atof(values[i].c_str()) << endl;

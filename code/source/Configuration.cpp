@@ -1,13 +1,18 @@
 #include <fstream>
 #include <string>
 #include "Configuration.h"
+#include "Writer.h"
 
 using namespace std;
 
 // read config file
-void Configuration::readConfiguration(string fileName)
+void Configuration::readConfiguration(string configurationFileName, string fileName)
 {
-    ifstream inputFile(fileName);
+    // open log file
+    string logFileName = fileName.substr(0, fileName.length() - 4) + ".log";
+    Writer::getInstance().open(logFileName);
+
+    ifstream inputFile(configurationFileName);
     string name, equal;
     double value;
 
@@ -16,14 +21,14 @@ void Configuration::readConfiguration(string fileName)
     {
         inputFile >> name;
         inputFile >> equal;
-        if (name != "compilation")
+        if (name != "strategy")
         {
             inputFile >> value;
             variableNames.push_back(name);
             variableValues.push_back(value);
         }
         else
-            inputFile >> compilation;
+            inputFile >> strategy;
     }
 }
 
@@ -35,7 +40,7 @@ double Configuration::getValue(string name)
             return variableValues[i];
 }
 
-string Configuration::getCompilation()
+string Configuration::getStrategy()
 {
-    return compilation;
+    return strategy;
 }

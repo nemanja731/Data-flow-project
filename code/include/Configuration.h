@@ -19,12 +19,12 @@ public:
 
     void readConfiguration(string fileName);
     double getValue(string name);
-    string getCompilation();
+    string getStrategy();
 
 private:
     Configuration() = default;
 
-    string compilation;
+    string strategy;
     vector<string> variableNames;
     vector<double> variableValues;
 };

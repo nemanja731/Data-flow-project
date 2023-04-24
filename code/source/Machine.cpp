@@ -6,6 +6,7 @@
 #include "Machine.h"
 #include "Memory.h"
 #include "Sched.h"
+#include "Writer.h"
 
 using namespace std;
 
@@ -92,6 +93,9 @@ void Machine::execute(string file)
 
     // save Memory state
     Memory::getInstance().save(file);
+
+    // close log file
+    Writer::getInstance().close();
 }
 
 // update all operations
