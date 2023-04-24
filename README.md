@@ -8,5 +8,4 @@
 
 <p float="left">
   <img src="images/testTxt.png" width="100" />
-  <img src="images/testImf.png" width="100" /> 
 </p>
