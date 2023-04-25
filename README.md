@@ -31,7 +31,7 @@ The **Configuration** class is responsible for this part.
 
 ### Creation of imf file
   
-The **test.imf** file is created by the Compiler. The main function that is responsible for this is `compile(string fileName)`. It works so that the Compiler reads the test.txt file, converts the expressions into postfix form, divides each such expression into the smallest mathematical expressions made up of only one operation, and finally attaches it in a certain format.
+The **test.imf** file is created by the **Compiler**. Function responsible for this is `compile(string fileName)`. It works so that the Compiler reads the test.txt file, converts the expressions into postfix form, divides each such expression into the smallest mathematical expressions made up of only one operation, and finally attaches it in a certain format.
 
 #### Infix to Postfix
 
