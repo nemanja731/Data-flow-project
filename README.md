@@ -22,7 +22,7 @@ In addition to the two input files, a static library **lib** with an already des
 
 ### Read configuration
 
-First you need to load the configuration with a function `readConfiguration(string configurationFileName, string fileName)`. There are several things in the configuration. At the beginning of the file are the times required to perform each of the mathematical operations. After that, there is a number that tells us how many operations can be performed in parallel. At the end, there is a compilation that talks about the strategy we use, and it can be **Simple** or **Advance**.
+The function `readConfiguration(string configurationFileName, string fileName)` from class **Configuration** will read **config.txt** file. There are several things in the configuration. At the beginning of the file are the times required to perform each of the mathematical operations. After that, there is a number that tells us how many operations can be performed in parallel. At the end, there is a compilation that talks about the strategy we use, and it can be **Simple** or **Advance**.
 The strategy should divide each expression into simple mathematical operations that will be passed to the static library for processing. The Advance strategy, in contrast to the Simple strategy, sorts the operations so that the simplest ones are executed first and those that will take the least amount of time to execute. The operation can be performed only when the values of its operands have been calculated.
 </br></br>
 The **Configuration** class is responsible for this part.
