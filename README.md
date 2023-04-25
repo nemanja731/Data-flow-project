@@ -60,3 +60,5 @@ When this is done, the operations are arranged into a waiting vector and an exec
 ---
 
 ### Make mem file
+
+ When the whole process is finished, it is necessary to save the processing results in the **test.mem** file. With the help of the static library, the order in which the operations were performed is remembered, as well as the start and duration of each operation. This is realized with the help of the **Memory** class.
