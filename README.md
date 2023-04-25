@@ -44,9 +44,9 @@ The program can hardly distinguish and resolve parentheses and mathematical oper
 The **Compiler** and **Strategy** classes are responsible for this part. After converting the expression into postfix notation, it is necessary to single out each command that makes up that expression, and this will represent one line of the test.imf file. When it is finished, it is possible to see the transformation of the **test.txt** file into a **test.imf** file:
 
 <p float="left">
-  <img src="images/testTxt.png" width="40%" />
-  <img src="images/arrow.png" width="18%" />
-  <img src="images/testImf.png" width="40%" />
+  <img src="images/testTxt.png" width="35%" />
+  <img src="images/arrow.png" width="15%" />
+  <img src="images/testImf.png" width="35%" />
 </p>
 
 ---
