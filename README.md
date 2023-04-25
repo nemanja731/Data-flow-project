@@ -7,13 +7,13 @@ The project realizes the simulation of data flow processing. Two input files **c
 In the file **config.txt** there is the configuration of the project, which determines how the project will function:
 
 <p align="left">
-  <img src="images/configTxt.png" width="30%">
+  <img src="images/configTxt.png" width="40%">
 </p>
 
 In the file **test.txt** there are mathematical expressions that include basic operations, where each expression can have several operations, and it is separated in a separate line:
 
 <p align="left">
-  <img src="images/testTxt.png" width="30%">
+  <img src="images/testTxt.png" width="40%">
 </p>
 
 In addition to the two input files, a static library **lib** with an already designed data processing tool is provided. The goal of the project is to load the input files, use the attached static library and implement the compiler. The compiler needs to divide mathematical expressions into the smallest expressions and execute them individually. Some expressions in parallel, some not, and as a final result, it should return a test.mem file that contains in each row, sorted by the time of the start of execution, the operation that was executed and their duration in ns.
@@ -38,15 +38,15 @@ The **test.imf** file is created by the **Compiler**. Function responsible for t
 The program can hardly distinguish and resolve parentheses and mathematical operations in infix notation. Mathematical operations as well as parentheses have their own priority, which determines the order in which the operations will be performed. It is necessary to create a form that the computer can understand and that will work even without brackets. It is a postfix form. In the program, this was realized with the help of `infixToPostfix(line)`. An example of switching expressions from infix notation to postfix is given in the following image:
 
 <p align="left">
-  <img src="images/infixToPostfix.png" width="30%">
+  <img src="images/infixToPostfix.png" width="40%">
 </p>
 
 The **Compiler** and **Strategy** classes are responsible for this part. After converting the expression into postfix notation, it is necessary to single out each command that makes up that expression, and this will represent one line of the test.imf file. When it is finished, it is possible to see the transformation of the **test.txt** file into a **test.imf** file:
 
 <p float="left">
-  <img src="images/testTxt.png" width="30%" />
-  <img src="images/arrow.png" width="10%" />
-  <img src="images/testImf.png" width="30%" />
+  <img src="images/testTxt.png" width="40%" />
+  <img src="images/arrow.png" width="18%" />
+  <img src="images/testImf.png" width="40%" />
 </p>
 
 ---
@@ -58,7 +58,7 @@ The classes used in this part are **Machine**, **Operation** and two classes fro
 When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing. 
 
 <p align="left">
-  <img src="https://cdn.dribbble.com/users/119313/screenshots/1681630/media/33851ad16ce94475bba81514bb4ae181.gif" width="30%" align="center"/>
+  <img src="https://cdn.dribbble.com/users/119313/screenshots/1681630/media/33851ad16ce94475bba81514bb4ae181.gif" width="45%" align="center"/>
 </p>
   
 Operations that are not currently executing are placed in the **waitingOperations** vector, and operations that are currently executing are placed in the **executingOperations** vector. When the operation is executed, it is removed from the executingOperations vector and a place is freed for a new operation from the waitingOperations vector, and in order for the operation to be executed, it is necessary that the operands of that operation have been calculated. The sign that the Operation is finished is given by the Scheduler, which calls the `notify(ID id)` function that is implemented in the Operation class. At the end of the notify operation, a log is recorded in the test.log file and other operations are updated, because the current operation may have produced an operand that is used in another operation that is waiting to be executed.
