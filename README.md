@@ -53,6 +53,10 @@ The **Compiler** and **Strategy** classes are responsible for this part. After c
 
 ### Start Scheduler
 
+The classes used in this part are **Machine**, **Operation** and two classes from the static library lib: **Scheduler** and **Event**. After creating the imf file, it is necessary to load that imf file and create operations that are found individually in each line of the imf file. This is done using the **readImf(string fileName)** function from the Machine class.</br></br>
+
+When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library. This is done using two main functions: **execute(string fileName)** and **schedule()**. Operations that are not currently executing are placed in the **waitingOperations** vector, and operations that are currently executing are placed in the **executingOperations** vector. When the operation is executed, it is removed from the executingOperations vector and a place is freed for a new operation from the waitingOperations vector, and in order for the operation to be executed, it is necessary that the operands of that operation have been calculated.
+
 ---
 
 ### Make mem file
