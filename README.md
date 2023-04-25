@@ -57,7 +57,7 @@ The classes used in this part are **Machine**, **Operation** and two classes fro
 
 When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing. 
 
-<p align="left">
+<p align="center">
   <img src="https://cdn.dribbble.com/users/119313/screenshots/1681630/media/33851ad16ce94475bba81514bb4ae181.gif" width="30%" align="center"/>
 </p>
   
