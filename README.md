@@ -30,7 +30,7 @@ The **Configuration** class is responsible for this part.
 ---
 
 ### Creation of imf file
-
+  
 The **test.imf** file is created by the Compiler. The main function that is responsible for this is `compile(string fileName)`. It works so that the Compiler reads the test.txt file, converts the expressions into postfix form, divides each such expression into the smallest mathematical expressions made up of only one operation, and finally attaches it in a certain format.
 
 #### Infix to Postfix
@@ -55,7 +55,13 @@ The **Compiler** and **Strategy** classes are responsible for this part. After c
 
 The classes used in this part are **Machine**, **Operation** and two classes from the static library lib: **Scheduler** and **Event**. After creating the imf file, it is necessary to load that imf file and create operations that are found individually in each line of the imf file. This is done using the `readImf(string fileName)` function from the Machine class.</br></br>
 
-When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing. </br></br>Operations that are not currently executing are placed in the **waitingOperations** vector, and operations that are currently executing are placed in the **executingOperations** vector. When the operation is executed, it is removed from the executingOperations vector and a place is freed for a new operation from the waitingOperations vector, and in order for the operation to be executed, it is necessary that the operands of that operation have been calculated. The sign that the Operation is finished is given by the Scheduler, which calls the `notify(ID id)` function that is implemented in the Operation class. At the end of the notify operation, a log is recorded in the test.log file and other operations are updated, because the current operation may have produced an operand that is used in another operation that is waiting to be executed.
+When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing. 
+
+<p align="left">
+  <img src="https://cdn.dribbble.com/users/119313/screenshots/1681630/media/33851ad16ce94475bba81514bb4ae181.gif" width="30%" align="center"/>
+</p>
+  
+Operations that are not currently executing are placed in the **waitingOperations** vector, and operations that are currently executing are placed in the **executingOperations** vector. When the operation is executed, it is removed from the executingOperations vector and a place is freed for a new operation from the waitingOperations vector, and in order for the operation to be executed, it is necessary that the operands of that operation have been calculated. The sign that the Operation is finished is given by the Scheduler, which calls the `notify(ID id)` function that is implemented in the Operation class. At the end of the notify operation, a log is recorded in the test.log file and other operations are updated, because the current operation may have produced an operand that is used in another operation that is waiting to be executed.
 
 ---
 
