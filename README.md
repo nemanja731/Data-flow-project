@@ -27,21 +27,29 @@ The strategy should divide each expression into simple mathematical operations t
 </br></br>
 The **Configuration** class is responsible for this part.
 
-### Infix to Postfix
+---
+
+### Creation of imf file
+
+#### Infix to Postfix
 
 <p align="left">
   <img src="images/infixToPostfix.png" width="30%">
 </p>
 
-### Creation of imf file
 
 <p float="left">
   <img src="images/testTxt.png" width="30%" />
   <img src="images/arrow.png" width="10%" />
   <img src="images/testImf.png" width="30%" />
 </p>
-test.txt        ->        test.imf
+
+The **Compiler** and **Strategy** classes are responsible for this part.
+
+---
 
 ### Start Scheduler
+
+---
 
 ### Make mem file
