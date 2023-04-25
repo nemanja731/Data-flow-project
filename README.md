@@ -18,6 +18,10 @@ In the file **test.txt** there are mathematical expressions that include basic o
 
 In addition to the two input files, a static library **lib** with an already designed data processing tool is provided. The goal of the project is to load the input files, use the attached static library and implement the compiler. The compiler needs to divide mathematical expressions into the smallest expressions and execute them individually. Some expressions in parallel, some not, and as a final result, it should return a test.mem file that contains in each row, sorted by the time of the start of execution, the operation that was executed and their duration in ns.
 
+</br></br>
+
+All code outside the static library is located in the **code** folder, which contains the **include** and **solution** subfolders, where all the code divided into **.h** and **.cpp** files is located.
+
 ## Main parts of the project
 
 ### Read configuration
@@ -30,7 +34,7 @@ The **Configuration** class is responsible for this part.
 ---
 
 ### Creation of imf file
-  
+
 The **test.imf** file is created by the **Compiler**. Function responsible for this is `compile(string fileName)`. It works so that the Compiler reads the test.txt file, converts the expressions into postfix form, divides each such expression into the smallest mathematical expressions made up of only one operation, and finally attaches it in a certain format.
 
 #### Infix to Postfix
@@ -55,7 +59,7 @@ The **Compiler** and **Strategy** classes are responsible for this part. After c
 
 The classes used in this part are **Machine**, **Operation** and two classes from the static library lib: **Scheduler** and **Event**. After creating the imf file, it is necessary to load that imf file and create operations that are found individually in each line of the imf file. This is done using the `readImf(string fileName)` function from the Machine class.</br></br>
 
-When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing. 
+When this is done, the operations are arranged into a waiting vector and an execution vector and sent to the **Scheduler** - a class from the static library that processes the passed operations, using the function `processNow()`. Before the operation is sent to the Scheduler class for execution, an Event for that operation is first created using the **Event** class from the static library, using the function </br>`create(Operation o, Time t)`. The two main functions that organize this process and communicate with these two classes from the static library are the `execute(string fileName)` and `schedule()` functions from class Machine. The execute function starts when reading the imf file and ends when all operations are completed. The schedule function organizes the sending of operations for processing.
 
 <p align="left">
   <img src="https://cdn.dribbble.com/users/119313/screenshots/1681630/media/33851ad16ce94475bba81514bb4ae181.gif" width="45%" align="center"/>
@@ -67,4 +71,4 @@ Operations that are not currently executing are placed in the **waitingOperation
 
 ### Make mem file
 
- When the whole process is finished, it is necessary to save the processing results in the **test.mem** file. With the help of the static library, the order in which the operations were performed is remembered, as well as the start and duration of each operation. This is realized with the help of the **Memory** class and the file is saved with the help of the function save(string fileName). During execution in previous section, all necessary data for the mem file is saved in the Scheduler.
+When the whole process is finished, it is necessary to save the processing results in the **test.mem** file. With the help of the static library, the order in which the operations were performed is remembered, as well as the start and duration of each operation. This is realized with the help of the **Memory** class and the file is saved with the help of the function save(string fileName). During execution in previous section, all necessary data for the mem file is saved in the Scheduler.

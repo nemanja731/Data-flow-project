@@ -16,9 +16,9 @@ Machine &Machine::getInstance()
     return instance;
 }
 
-void Machine::readImf(string file)
+void Machine::readImf(string fileName)
 {
-    ifstream inputFile(file);
+    ifstream inputFile(fileName);
     string line, token;
     string op, dest, var1, var2;
     Operation *temporary;
@@ -79,10 +79,10 @@ void Machine::schedule()
 }
 
 // put operations ready for execution on scheduler
-void Machine::execute(string file)
+void Machine::execute(string fileName)
 {
     // read machine
-    readImf(file);
+    readImf(fileName);
 
     // process all ready operations until they are all done
     while ((!waitingOperations.empty()) || (!executingOperations.empty()))
@@ -92,7 +92,7 @@ void Machine::execute(string file)
     }
 
     // save Memory state
-    Memory::getInstance().save(file);
+    Memory::getInstance().save(fileName);
 
     // close log file
     Writer::getInstance().close();
